@@ -1,36 +1,276 @@
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Premium Cyberpunk Luxury Theme */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.animate-fade-in {
-    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+body {
+    background: linear-gradient(135deg, #090d16 0%, #111827 100%);
+    color: #f3f4f6;
+    min-height: 100vh;
+    padding-top: 240px; /* Space for Pinned Player */
+    padding-bottom: 80px;  /* Space for Nav Bar */
+    overflow-x: hidden;
 }
 
-/* Custom Webkit Scrollbars */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+/* 1. Sticky Video Player */
+.player-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #000;
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.15);
 }
-::-webkit-scrollbar-track {
-    background: #090d16;
+video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: block;
 }
-::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #3b82f6;
+.now-playing {
+    background: #0f172a;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #00f0ff;
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+    border-bottom: 2px solid #bd00ff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Custom Card Glassmorphism */
-.glass-card {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(9, 13, 22, 0.6) 100%);
-    backdrop-filter: blur(8px);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+/* 2. Layout Structure */
+.main-content {
+    padding: 15px;
 }
-.glass-card:hover {
-    transform: translateY(-4px);
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
-    box-shadow: 0 12px 20px -10px rgba(59, 130, 246, 0.15);
+.screen {
+    display: none;
 }
+.screen.active {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Search Box */
+.search-box-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+}
+#search-input {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 50px;
+    color: #fff;
+    outline: none;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+}
+#search-input:focus {
+    border-color: #00f0ff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* 3. Horizontal Scroll Category Bar */
+.category-bar {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+.category-bar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for clean look */
+}
+.category-pill {
+    white-space: nowrap;
+    padding: 8px 16px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.category-pill.active {
+    background: #00f0ff;
+    color: #000;
+    border-color: #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* 4. Channel Grid Cards */
+.channel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.channel-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    position: relative;
+    transition: all 0.25s;
+}
+.channel-card:active {
+    transform: scale(0.96);
+    border-color: #bd00ff;
+}
+.channel-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+}
+.channel-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.fav-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #4b5563;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.fav-btn.active {
+    color: #ff2a6d;
+    text-shadow: 0 0 5px #ff2a6d;
+}
+
+/* 5. Ultra-Premium Creator Profile Card */
+.profile-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(189, 0, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(189, 0, 255, 0.1);
+    margin-top: 20px;
+}
+.profile-avatar-wrapper {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(45deg, #00f0ff, #bd00ff);
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #0f172a;
+}
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, #00f0ff, #bd00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
+}
+.profile-tagline {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+.profile-bio {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.social-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+.social-btn:active { transform: scale(0.9); }
+.social-btn.fb { background: #1877f2; box-shadow: 0 0 10px rgba(24, 119, 242, 0.4); }
+.social-btn.insta { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 0 10px rgba(220, 39, 67, 0.4); }
+
+/* Sticky Bottom Nav Bar */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: rgba(15, 23, 42, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+}
+.nav-item {
+    background: none;
+    border: none;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    width: 33.33%;
+    transition: all 0.2s;
+}
+.nav-item i { font-size: 1.2rem; }
+.nav-item.active {
+    color: #00f0ff;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* Shimmer Skeleton Loader */
+.skeleton-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.skeleton-card { height: 100px; background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; animation: loadingShimmer 1.4s infinite; border-radius: 12px; }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes loadingShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 5px rgba(0, 240, 255, 0.4); } 50% { box-shadow: 0 0 15px rgba(189, 0, 255, 0.7); } }
